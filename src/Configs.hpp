@@ -10,7 +10,7 @@ class Configs
     public:
         Configs();
         static std::vector<std::string> LoadConfFromFile(std::string path);
-        //static std::vector<std::string> BaseConfig;
+
         std::vector<std::string> BaseConfig = Configs::LoadConfFromFile("Configs/Main.ini") ;
         
 };
