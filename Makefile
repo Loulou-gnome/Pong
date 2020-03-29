@@ -5,7 +5,7 @@
 # Compiler settings - Can be customized.
 CC = g++
 CXXFLAGS = -std=c++11 -Wall
-LDFLAGS = 
+LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 
 # Makefile settings - Can be customized.
 APPNAME = Pong
