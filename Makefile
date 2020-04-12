@@ -6,15 +6,17 @@
 CC = g++
 CXXFLAGS = -std=c++11 -Wall
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
-
 # Makefile settings - Can be customized.
 APPNAME = Pong
 EXT = .cpp
+HEXT = .hpp
 SRCDIR = src
+HDRDIR = src/include
 OBJDIR = obj
 
 ############## Do not change anything from here downwards! #############
 SRC = $(wildcard $(SRCDIR)/*$(EXT))
+HSRC = $(wildcard $(HDRDIR)/*$(HEXT))
 OBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)/%.o)
 DEP = $(OBJ:$(OBJDIR)/%.o=%.d)
 # UNIX-based OS variables & settings

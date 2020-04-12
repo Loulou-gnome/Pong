@@ -1,4 +1,4 @@
-#include "App.hpp"
+#include "include/App.hpp"
 
 /// Run The app
 void App::Run(App* application)
@@ -13,28 +13,29 @@ void App::Run(App* application)
 
 
 
-App::App(std::string appname, std::string resx, std::string resy)
+App::App(Configs conf)
 {
-    m_app_name = appname;
+    m_app_name = conf.BaseConfig.GetValueFromLabel("AppName");
 
-    m_resolution.width = std::stoi(resx);
-    m_resolution.height = std::stoi(resy);
+    m_resolution.width = std::stoi(conf.BaseConfig.GetValueFromLabel("ResolX"));
+    m_resolution.height = std::stoi(conf.BaseConfig.GetValueFromLabel("ResolY"));
 }
 
 
 // Load Graphicals things
 void App::Load()
 {
+    m_application.create(m_resolution, m_app_name);
 
     // entities loading
+    Entity::LoadEntities("Configs/World1/Entities.ini");
 }
 
 //init Math and logic
 void App::Init()
 {
     m_application.setFramerateLimit(60);
-    m_application.create(m_resolution, m_app_name);
-
+    
 }
 
 //Update Graphics and physics
@@ -47,7 +48,7 @@ void App::Update(sf::Clock Clock)
 void App::Draw()
 {
     m_application.display();
-
+    m_application.draw(sf::Sprite(Entity::DrawEntities()));
     m_application.clear();
 
 
