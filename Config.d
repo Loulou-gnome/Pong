@@ -1,1 +1,1 @@
-obj/Config.o: src/Config.cpp src/include/Config.hpp
+obj/Config.o: src/Config.cpp src/Config.hpp

@@ -1,5 +1,7 @@
-#include "include/App.hpp"
+#include "App.hpp"
 
+
+using namespace std;
 /// Run The app
 void App::Run(App* application)
 {
@@ -12,15 +14,52 @@ void App::Run(App* application)
 }
 
 
-
-App::App(Configs conf)
+Config App::LoadConfFromFile(string path)
 {
-    m_app_name = conf.BaseConfig.GetValueFromLabel("AppName");
+    Config conf;
+    string line;
+    ifstream myfile (path);
+    if (myfile.is_open())
+    {
+        string lastline("no line");
+        while ( getline (myfile,line) )
+        {
+            if(line.find('=') >= 1)
+            {
+                string label = line.substr(0, line.find('='));
+                string value = line.substr(line.find('=')+1);
+                conf.PushConfig(label, value);
+            }
+            
+            lastline = line;
 
-    m_resolution.width = std::stoi(conf.BaseConfig.GetValueFromLabel("ResolX"));
-    m_resolution.height = std::stoi(conf.BaseConfig.GetValueFromLabel("ResolY"));
+        }
+        myfile.close();
+    }
+
+  else cout << "Unable to open file: " << path << '\n'; 
+
+    return conf; 
 }
 
+
+
+App::App(Config *conf)
+{
+    BaseOptions = conf;
+    m_app_name = BaseOptions->GetValueFromLabel("Name");
+    m_resolution.width = std::stoi(BaseOptions->GetValueFromLabel("ResolX"));
+    m_resolution.height = std::stoi(BaseOptions->GetValueFromLabel("ResolY"));
+    m_current_world = new World();
+}
+
+App::~App()
+{
+
+    delete m_current_world;
+    delete BaseOptions;
+    
+}
 
 // Load Graphicals things
 void App::Load()
@@ -28,7 +67,7 @@ void App::Load()
     m_application.create(m_resolution, m_app_name);
 
     // entities loading
-    Entity::LoadEntities("Configs/World1/Entities.ini");
+    m_current_world->LoadEntities("Configs/World1/Entities.ini");
 }
 
 //init Math and logic
@@ -48,7 +87,9 @@ void App::Update(sf::Clock Clock)
 void App::Draw()
 {
     m_application.display();
-    m_application.draw(sf::Sprite(Entity::DrawEntities()));
+    
+    // Draw things
+
     m_application.clear();
 
 

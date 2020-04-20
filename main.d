@@ -1,2 +1,2 @@
-obj/main.o: src/main.cpp src/include/Configs.hpp src/include/Entity.hpp \
- src/include/Configs.hpp src/include/App.hpp
+obj/main.o: src/main.cpp src/Config.hpp src/App.hpp src/World.hpp \
+ src/Entity.hpp

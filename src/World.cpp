@@ -1,33 +1,42 @@
-#include "include/Configs.hpp"
+#include "World.hpp"
+
+World::World()
+{
+    
+}
+
+World::~World()
+{
+    delete entities;
+}
 
 using namespace std;
-Configs::Configs()
-{
 
-}
-Config Configs::LoadConfFromFile(string path)
+
+void World::LoadMap(string mapfile)
 {
-    Config conf;
     string line;
-    ifstream myfile (path);
+    ifstream myfile (mapfile);
     if (myfile.is_open())
     {
         string lastline("no line");
+        Config current;
         while ( getline (myfile,line) )
         {
-            if(line.find('#') >= 0)
-                continue;
             if(line.find('=') >= 0)
             {
             string label = line.substr(0, line.find('='));
             string value = line.substr(line.find('=')+1);
-            cout << label << ':' << value << '\n';
-            conf.PushConfig(label, value);
+            current.PushConfig(label, value);
             }
             else if ( line.find('[') >= 0 && line.find(']') >= 0)
             {
-                if(lastline == "no line")
-                    conf.SetName(line.substr(1, line.find(']')-1));
+                if(lastline != "no line")
+                {
+                    //map->push_back(Tile(current));
+                    current.Reset();
+                }
+
             }
             lastline = line;
 
@@ -35,15 +44,14 @@ Config Configs::LoadConfFromFile(string path)
         myfile.close();
     }
 
-  else cout << "Unable to open file: " << path << '\n'; 
+  else cout << "Unable to open file: " << mapfile << '\n'; 
+ 
+    
 
-    return conf; 
 }
-
-ConfigRig Configs::LoadEntities(string entityfile)
+void World::LoadEntities(string entityfile)
 {
 
-     ConfigRig conf;
     string line;
     ifstream myfile (entityfile);
     if (myfile.is_open())
@@ -52,20 +60,18 @@ ConfigRig Configs::LoadEntities(string entityfile)
         Config current;
         while ( getline (myfile,line) )
         {
-            if(line.find('#') >= 0)
-                continue;
+
             if(line.find('=') >= 0)
             {
             string label = line.substr(0, line.find('='));
             string value = line.substr(line.find('=')+1);
-            cout << label << ':' << value << '\n';
             current.PushConfig(label, value);
             }
             else if ( line.find('[') >= 0 && line.find(']') >= 0)
             {
                 if(lastline != "no line")
                 {
-                    conf.PushConfig(current);
+                    entities->push_back(Entity(current));
                     current.Reset();
                 }
 
@@ -77,8 +83,7 @@ ConfigRig Configs::LoadEntities(string entityfile)
     }
 
   else cout << "Unable to open file: " << entityfile << '\n'; 
-
-    return conf; 
+ 
     
 
 }

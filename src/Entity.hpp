@@ -4,18 +4,22 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include "Configs.hpp"
+#include "Config.hpp"
+#include "Drawable.hpp"
 
-class Entity
+class Entity : Drawable
 {
     public:
         /// Load all entities from a specific file 
         /// that means that you could change the entity at any time you want.
-        static bool LoadEntities(std::string entities_config_path);
-        static sf::Texture DrawEntities();
+        //static void LoadEntities(std::string, Entity*);
+        //static sf::Texture DrawEntities(Entity[]);
+
         Entity();
-        Entity(std::string texture_path);
-        virtual void SetTexturePath(std::string path) { m_texture_path = path; }
+        Entity(Config);
+        /// create an entity with the desired texture.
+        Entity(std::string);
+        virtual ~Entity();
         /// Load the graphical parts of an Entity.
         virtual bool Load();
         /// Init all logical parts of an Entity.
@@ -24,8 +28,7 @@ class Entity
         virtual sf::Sprite Draw();
 
 
-        /// entities currently displayed.
-        static std::vector<Entity> entities;
+    
     protected:
 
         std::string m_texture_path;
